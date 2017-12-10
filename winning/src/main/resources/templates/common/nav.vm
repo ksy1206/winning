@@ -1,0 +1,43 @@
+<nav class="w3-sidebar w3-bar-block w3-card" id="mySidebar">
+	<div class="w3-container w3-theme-d2">
+		<span onclick="closeSidebar()" class="w3-button w3-display-topright w3-large">X</span>
+		<div class="w3-padding w3-center">
+			<h3>Menu</h3>
+		</div>
+	</div>
+	<br>
+	<a class="w3-bar-item w3-button" href="/match">
+		<i class="fa fa-square-o" aria-hidden="true"></i> 대진표 생성
+	</a>
+	<hr>
+	<a class="w3-bar-item w3-button" href="#">
+		<i class="fa fa-square-o" aria-hidden="true"></i> 월별 기록
+	</a>
+	<hr>
+	<a class="w3-bar-item w3-button" href="#">
+		<i class="fa fa-square-o" aria-hidden="true"></i> 일별 기록
+	</a>
+	<hr>
+	<a class="w3-bar-item w3-button" href="#">
+		<i class="fa fa-square-o" aria-hidden="true"></i> 기록실
+	</a>
+	<hr>
+</nav>
+
+<header class="w3-bar w3-card w3-theme">
+	<button class="w3-bar-item w3-button w3-xxlarge w3-hover-theme" onclick="openSidebar()">&#9776;</button>
+	<h3 class="w3-bar-item" onclick="moveHome();">Winning Eleven</h3>
+</header>
+
+<script>
+	closeSidebar();
+	function openSidebar() {
+		document.getElementById("mySidebar").style.display = "block";
+	}
+	function closeSidebar() {
+		document.getElementById("mySidebar").style.display = "none";
+	}
+	function moveHome() {
+		alert("홈으로");
+	}
+</script>

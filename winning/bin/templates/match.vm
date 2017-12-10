@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	<title>Winning</title>
+	#parse("/common/header.vm")
+	#parse("/common/script.vm")
+</head>
+<body style="max-width:400px; margin:5px; border:1px solid #ccc">
+
+	## 메뉴
+	#parse("/common/nav.vm")
+
+	<div class="w3-panel">
+		<div class="w3-row">
+			<h4>1경기 [권세윤 vs 장진수]</h4>
+			<div class="w3-col s4 w3-center">
+				<img src="/img/team/Juventus.png" width="48px;">
+				<p>유벤투스<p>
+			</div>
+			<div class="w3-col s4 w3-center">
+				<p>vs</p>
+			</div>
+			<div class="w3-col s4 w3-center">
+				<img src="/img/team/Juventus.png" width="48px;">
+				<p>레알마드리드<p>
+			</div>
+			
+		</div>	
+		<hr>
+	</div>
+
+</body>
+</html> 

@@ -1,0 +1,54 @@
+buildscript {
+	ext {
+		springBootVersion = '1.4.7.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+
+group = 'com.ksy'
+version = '0.0.1'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	providedRuntime
+}
+
+dependencies {
+	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.2.2')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	
+	// Velocity 플러그인
+	compile('org.springframework.boot:spring-boot-starter-velocity')
+
+	// Loombok 플러그인
+	compile("org.projectlombok:lombok:1.16.18")
+
+	// DB 연결 JDBC Library
+	compile('mysql:mysql-connector-java')
+
+	// Log
+	compile('com.googlecode.log4jdbc:log4jdbc:1.2')
+
+	// Groovy
+	compile('org.codehaus.groovy:groovy-all:2.4.13')
+
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'

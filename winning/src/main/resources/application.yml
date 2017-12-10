@@ -1,0 +1,36 @@
+server:
+  port: 8800
+  context-path: /
+  session:
+    cookie:
+      max-age: 14400
+      path: /
+      domain: .test.com
+      secure: true
+      http-only: true
+    timeout: 28800
+  tomcat:
+    max-threads: 300
+
+spring:
+  http:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  velocity:
+    suffix: .vm
+    properties:
+      input.encoding: UTF-8
+      output.encoding: UTF-8
+      eventhandler:
+        referenceinsertion:
+          class: com.ksy.winning.velocity.MyRefrenceInsertionEventHandler
+  datasource:
+    type: org.apache.tomcat.jdbc.pool.DataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://agathanis.cnmkspdlmfr9.ap-northeast-2.rds.amazonaws.com:3306/winning?autoReconnect=true&useSSL=false
+    username: agathanis
+    password: master1234
+
+logging:
+  config: classpath:logback-spring.xml

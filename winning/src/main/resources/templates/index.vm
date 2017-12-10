@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	<title>Winning</title>
+	#parse("/common/header.vm")
+	#parse("/common/script.vm")
+</head>
+<body style="max-width:400px; margin:5px; border:1px solid #ccc">
+
+	## 메뉴
+	#parse("/common/nav.vm")
+
+	<div class="w3-panel">
+		<div class="w3-row">
+			2017년도 랭킹
+		</div>	
+		<hr>
+		<div class="w3-row">
+			월별 랭킹
+		</div>
+		<hr>
+		<div class="w3-row">
+			????
+		</div>
+	</div>
+
+</body>
+</html> 
