@@ -10,24 +10,81 @@
 	## 메뉴
 	#parse("/common/nav.vm")
 
-	<div class="w3-panel">
-		<div class="w3-row">
-			<h4>1경기 [권세윤 vs 장진수]</h4>
-			<div class="w3-col s4 w3-center">
-				<img src="/img/team/Juventus.png" width="48px;">
-				<p>유벤투스<p>
-			</div>
-			<div class="w3-col s4 w3-center">
-				<p>vs</p>
-			</div>
-			<div class="w3-col s4 w3-center">
-				<img src="/img/team/Juventus.png" width="48px;">
-				<p>레알마드리드<p>
-			</div>
-			
-		</div>	
+	## 로딩
+	<div style="width:100%; text-align:center; margin-top:5em;" id="loading">
+		<i class="fa fa-spinner fa-spin" style="font-size: 200px;"></i>
 		<hr>
+		<h3>경기 목록 생성중</h3>
 	</div>
 
+	<div class="w3-panel" style="display:none;" id="content">
+		#set($count = 1)
+		#foreach($num in [0, 2, 4, 6, 8, 10])
+		<div class="w3-row">
+			#set($number = $num + 1)
+			<p class="w3-center">
+				<div class="w3-row">
+					<div class="w3-col s4">
+						<span class="w3-tag w3-round-large w3-red w3-center">[$count] 경기</span> 
+					</div>
+					<div class="w3-col s4 w3-center">
+						<span style="font-size: 13px;" id="player_$num"></span> : <span style="font-size: 13px;" id="player_$number"></span>
+					</div>
+					<div class="w3-col s4">
+						&nbsp;
+					</div>
+				</div>
+			</p>
+			<div class="w3-col s5 w3-center">
+				<img src="" width="50px;" id="teamImg_$num"><br>
+				<span id="team_$num"></span>
+			</div>
+			<div class="w3-col s2 w3-center">
+				<p style="font-size:20px;">vs</p>
+			</div>
+			<div class="w3-col s5 w3-center">
+				<img src="" width="50px;" id="teamImg_$number"><br>
+				<span id="team_$number"></span>
+				
+			</div>
+		</div>
+		<hr>
+		#set($count = $count + 1)
+		#end
+	</div>
 </body>
+<script>
+	function App() {
+		var _this = this;
+	
+		## 경기 정보 가져오기
+		_this.matchRecord = function() {
+			$('#loading').show();
+			var url = "/ajax/match";
+			$.ajax({
+				url: url,
+				type: 'GET',
+				success: function(result) {
+					$.each(result, function(i, value) {
+						$('#player_'+value.no).text(value.player);
+						$('#teamImg_'+value.no).attr("src", "/img/team/"+value.teamImgName+".png");
+						$('#team_'+value.no).text(value.teamName);
+					});
+					$('#loading').hide();
+					$('#content').show();
+				},
+				error: function(result) {
+					alert("Error!!");
+				}
+			});
+		}
+
+		## Init
+		_this.init = function() {
+			_this.matchRecord();
+		}();
+	}
+
+	var app = new App();
+</script>
 </html> 

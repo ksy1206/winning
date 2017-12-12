@@ -17,5 +17,6 @@ public class MainService {
 	// 팀 목록 가져오기
 	public List<TeamDto> getTeamList() {
 		return mMapper.getTeamList();
+//		return null;
 	}
 }
