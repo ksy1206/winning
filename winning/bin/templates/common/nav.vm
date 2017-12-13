@@ -7,14 +7,14 @@
 	</div>
 	<br>
 	<a class="w3-bar-item w3-button" href="/match">
-		<i class="fa fa-square-o" aria-hidden="true"></i> 대진표 생성
+		<i class="fa fa-square-o" aria-hidden="true"></i> 대진표
 	</a>
 	<hr>
 	<a class="w3-bar-item w3-button" href="#">
 		<i class="fa fa-square-o" aria-hidden="true"></i> 월별 기록
 	</a>
 	<hr>
-	<a class="w3-bar-item w3-button" href="#">
+	<a class="w3-bar-item w3-button" href="/dailyGroup">
 		<i class="fa fa-square-o" aria-hidden="true"></i> 일별 기록
 	</a>
 	<hr>
@@ -38,6 +38,6 @@
 		document.getElementById("mySidebar").style.display = "none";
 	}
 	function moveHome() {
-		alert("홈으로");
+		location.href="/";
 	}
 </script>

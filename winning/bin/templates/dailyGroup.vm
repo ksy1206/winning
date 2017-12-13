@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	<title>Winning</title>
+	#parse("/common/header.vm")
+	#parse("/common/script.vm")
+</head>
+<body style="max-width:400px; margin:5px; border:1px solid #ccc">
+
+	## 메뉴
+	#parse("/common/nav.vm")
+
+	<div class="w3-container">
+		<table class="w3-table-all" style="margin-top:1em; margin-bottom: 1em;">
+			<thead>
+				<tr class="w3-red">
+					<th colspan="2">일별 경기 정보</th>
+				</tr>
+			</thead>
+			#foreach($insertDate in $GroupList)
+			<tr onclick="moveListDetails('$insertDate');">
+				<td>
+					<i class="fa fa-genderless" aria-hidden="true"></i>
+					$insertDate
+				</td>
+				<td><i class="fa fa-chevron-right" aria-hidden="true"></i></td>
+			</tr>
+			#end
+		</table>
+	</div>
+	
+	<script>
+	function moveListDetails(insertDate) {
+		location.href="/dailyMatchInfo?insertDate="+insertDate;
+	}
+	</script>
+
+</body>
+</html> 
