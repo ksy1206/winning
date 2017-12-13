@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ksy.winning.dto.MatchDto;
+import com.ksy.winning.dto.MemberDto;
 import com.ksy.winning.dto.TeamDto;
 import com.ksy.winning.mapper.MainMapper;
 import com.ksy.winning.util.CalenderUtil;
@@ -73,5 +74,27 @@ public class MainService {
 	// 일별 경기 기록 가져오기
 	public List<String> dailyGroupByInsertDate() {
 		return mMapper.selectGroupByInsertDateMatchInfo();
+	}
+	
+	// 일별 경기 상세 목록 가져오기
+	public List<MatchDto> getDailyMatchInfo(String insertDate) {
+		return mMapper.selectDailyMatchInfo(insertDate);
+	}
+	
+	// 일별 경기 상세 목록 (개인기록)
+	public List<MemberDto> getMemberDailyInfo(String insertDate) {
+		return mMapper.selectMemberDailyMatchInfo(insertDate);
+	}
+	
+	
+	// 통합 랭킹
+	public List<MemberDto> getMemberAllMatchInfo() {
+		return mMapper.selectMemberAllMatchInfo();
+	}
+	
+	// 월별 랭킹
+	public List<MemberDto> getMemberMonthInfo(String insertDate) {
+		log.error("@@@@@"+insertDate);
+		return mMapper.selectMemberMonthInfo(insertDate);
 	}
 }

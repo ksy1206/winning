@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.ksy.winning.dto.MatchDto;
+import com.ksy.winning.dto.MemberDto;
 import com.ksy.winning.dto.TeamDto;
 
 @Mapper
@@ -75,4 +76,93 @@ public interface MainMapper {
 	
 	@Select("SELECT insert_date FROM match_info_list GROUP BY insert_date DESC")
 	public List<String> selectGroupByInsertDateMatchInfo();
+	
+	@Results({
+		@Result(property = "no", column = "no"),
+		@Result(property = "firstTeamNo", column = "first_team_no"),
+		@Result(property = "firstPlayer", column = "first_player"),
+		@Result(property = "lastTeamNo", column = "last_team_no"),
+		@Result(property = "lastPlayer", column = "last_player"),
+		@Result(property = "result", column = "result"),
+		@Result(property = "insertDate", column = "insert_date")
+	})
+	@Select("SELECT * FROM match_info_list WHERE insert_date = #{insertDate} ORDER BY match_no ASC")
+	public List<MatchDto> selectDailyMatchInfo(@Param("insertDate") String insertDate);
+	
+	@Results({
+		@Result(property = "memberName", column = "member_name"),
+		@Result(property = "memberVictory", column = "member_victory"),
+		@Result(property = "memberDraw", column = "member_draw"),
+		@Result(property = "memberDefeat", column = "member_defeat")
+	})
+	@Select("SELECT DISTINCT member_name "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"first\" AND insert_date = DATE(#{insertDate}) "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"last\" AND insert_date = DATE(#{insertDate}) ) as member_victory "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"draw\" AND insert_date = DATE(#{insertDate}) "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"draw\" AND insert_date = DATE(#{insertDate}) ) AS member_draw "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"last\" AND insert_date = DATE(#{insertDate}) "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"first\" AND insert_date = DATE(#{insertDate}) ) AS member_defeat "
+			+ "FROM member a")
+	public List<MemberDto> selectMemberDailyMatchInfo(@Param("insertDate") String insertDate);
+	
+	
+	
+	@Results({
+		@Result(property = "memberName", column = "member_name"),
+		@Result(property = "memberVictory", column = "member_victory"),
+		@Result(property = "memberDraw", column = "member_draw"),
+		@Result(property = "memberDefeat", column = "member_defeat")
+	})
+	@Select("SELECT DISTINCT member_name "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"first\" "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"last\") as member_victory "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"draw\" "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"draw\") AS member_draw "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"last\" "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"first\" ) AS member_defeat "
+			+ "FROM member a")
+	public List<MemberDto> selectMemberAllMatchInfo();
+	
+	@Results({
+		@Result(property = "memberName", column = "member_name"),
+		@Result(property = "memberVictory", column = "member_victory"),
+		@Result(property = "memberDraw", column = "member_draw"),
+		@Result(property = "memberDefeat", column = "member_defeat")
+	})
+	@Select("SELECT DISTINCT member_name "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"first\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"last\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") ) as member_victory "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"draw\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"draw\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\")) AS member_draw "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"last\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"first\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") ) AS member_defeat "
+			+ "FROM member a")
+	public List<MemberDto> selectMemberMonthInfo(@Param("insertDate") String insertDate);
 }

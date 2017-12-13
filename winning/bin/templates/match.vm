@@ -65,8 +65,8 @@
 			#set($count = $count + 1)
 			#end
 		#else
-			<div class="w3-panel w3-yellow w3-topbar w3-bottombar w3-border-amber">
-				<p>대진표를 생성해 주세요.</p>
+			<div class="w3-panel w3-green w3-topbar w3-bottombar w3-border-amber">
+				<p><b>대진표를 생성해 주세요.</b></p>
 				<p>대진표는 전경기 꼴찌가 생성합니다...</p>
 			</div>
 		#end

@@ -15,4 +15,15 @@ public class CalenderUtil {
 		String today = sdf.format(todayDate);
 		return today;
 	}
+	
+	/**
+	 * 이번 달
+	 * @return
+	 */
+	public static String getMonth() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+		Date todayDate = new Date();
+		String today = sdf.format(todayDate);
+		return today;
+	}
 }

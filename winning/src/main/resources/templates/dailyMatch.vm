@@ -9,16 +9,71 @@
 
 	## 메뉴
 	#parse("/common/nav.vm")
+	
+	#foreach($row in $MatchInfo)
+		#set($insertDate = $row.insertDate)
+	#end
 
 	<div class="w3-panel">
-		<div class="w3-row">
-			2017년도 랭킹
-		</div>	
-		<hr>
-		<div class="w3-row">
-			월별 랭킹
-		</div>
-		<hr>
+	
+		<table class="w3-table-all w3-center" style="margin-top:1em; margin-bottom: 1em;">
+			<thead>
+				<tr class="w3-green">
+					<th>랭킹</th>
+					<th>이름</th>
+					<th>승점</th>
+					<th>승</th>
+					<th>무</th>
+					<th>패</th>
+				</tr>
+			</thead>
+			#set($ranking = 1)
+			#foreach($row in $MemberList)
+			<tr>
+				<td>$ranking등</td>
+				<td>$row.memberName</td>
+				<td><span>$!row.memberPoint</span></td>
+				<td><span>$!row.memberVictory</span></td>
+				<td><span>$!row.memberDraw</span></td>
+				<td><span>$!row.memberDefeat</span></td>
+			</tr>
+			#set($ranking = $ranking+1)
+			#end
+		</table>
+	
+	
+		<table class="w3-table-all" style="margin-top:1em; margin-bottom: 1em;">
+			<thead>
+				<tr class="w3-green">
+					<th colspan="2"><i class="fa fa-chevron-down" aria-hidden="true"></i> $insertDate</th>
+				</tr>
+			</thead>
+			#foreach($row in $MatchInfo)
+			<tr>
+				<td>
+					<i class="fa fa-genderless" aria-hidden="true"></i>
+					<span>$!row.firstPlayer</span>
+					#if($!row.result == 'first')
+						<span class="w3-red">승</span>
+					#elseif($!row.result == 'draw')
+						<span class="w3-green">무</span>
+					#elseif($!row.result == 'last')
+						<span class="w3-black">패</span>
+					#end
+					&nbsp;&nbsp;VS&nbsp;&nbsp;
+					<span>$!row.lastPlayer</span>
+					#if($!row.result == 'first')
+						<span class="w3-black">패</span>
+					#elseif($!row.result == 'draw')
+						<span class="w3-green">무</span>
+					#elseif($!row.result == 'last')
+						<span class="w3-red">승</span>
+					#end
+				</td>
+				<td><i class="fa fa-trash" aria-hidden="true"></i></td>
+			</tr>
+			#end
+		</table>
 	</div>
 
 </body>

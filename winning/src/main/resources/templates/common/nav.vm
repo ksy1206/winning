@@ -1,8 +1,8 @@
 <nav class="w3-sidebar w3-bar-block w3-card" id="mySidebar">
 	<div class="w3-container w3-theme-d2">
 		<span onclick="closeSidebar()" class="w3-button w3-display-topright w3-large">X</span>
-		<div class="w3-padding w3-center">
-			<h3>Menu</h3>
+		<div class="w3-padding w3-center" onclick="moveHome();">
+			<h3><i class="fa fa-home" aria-hidden="true"></i> Menu &nbsp;</h3>
 		</div>
 	</div>
 	<br>
