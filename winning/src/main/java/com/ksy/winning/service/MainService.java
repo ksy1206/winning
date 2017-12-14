@@ -112,6 +112,11 @@ public class MainService {
 		return mMapper.selectMemberAllMatchInfo();
 	}
 	
+	// 년도별 랭킹
+	public List<MemberDto> getYearMonthInfo(String year) {
+		return mMapper.selectDateYearInfo(year);
+	}
+
 	// 월별 랭킹
 	public List<MemberDto> getMemberMonthInfo(String year, String month) {
 		return mMapper.selectDateMonthInfo(year, month);

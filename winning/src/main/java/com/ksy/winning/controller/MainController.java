@@ -47,14 +47,17 @@ public class MainController {
 		String thisMonth = CalenderUtil.getMonth();
 		
 		List<MemberDto> allRanking = mService.getMemberAllMatchInfo();
+		List<MemberDto> yearRanking = mService.getYearMonthInfo(thisYear);
 		List<MemberDto> monthRanking = mService.getMemberMonthInfo(thisYear, thisMonth);
 
 		Collections.sort(allRanking, new CompareSeqDesc());
+		Collections.sort(yearRanking, new CompareSeqDesc());
 		Collections.sort(monthRanking, new CompareSeqDesc());
-		
-		model.addAttribute("AllRanking", allRanking);
-		
+
 		model.addAttribute("ThisMonth", thisMonth);
+		model.addAttribute("ThisYear", thisYear);
+		model.addAttribute("AllRanking", allRanking);
+		model.addAttribute("YearRanking", yearRanking);
 		model.addAttribute("MonthRanking", monthRanking);
 		return "index";
 	}

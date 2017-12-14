@@ -38,6 +38,32 @@
 			#set($ranking = $ranking+1)
 			#end
 		</table>
+				<hr>
+		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> $!ThisYear 년 랭킹</p>
+		<table class="w3-table-all w3-center" style="margin-top:1em; margin-bottom: 1em;">
+			<thead>
+				<tr class="w3-green">
+					<th>랭킹</th>
+					<th>이름</th>
+					<th>승점</th>
+					<th>승</th>
+					<th>무</th>
+					<th>패</th>
+				</tr>
+			</thead>
+			#set($ranking = 1)
+			#foreach($row in $YearRanking)
+			<tr>
+				<td>$ranking등</td>
+				<td>$row.memberName</td>
+				<td><span>$!row.memberPoint</span></td>
+				<td><span>$!row.memberVictory</span></td>
+				<td><span>$!row.memberDraw</span></td>
+				<td><span>$!row.memberDefeat</span></td>
+			</tr>
+			#set($ranking = $ranking+1)
+			#end
+		</table>
 		<hr>
 		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> 통합 랭킹</p>
 		<table class="w3-table-all w3-center" style="margin-top:1em; margin-bottom: 1em;">

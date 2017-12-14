@@ -153,6 +153,31 @@ public interface MainMapper {
 	@Select("SELECT DISTINCT member_name "
 			+ ", (SELECT COUNT(*) FROM match_info_list "
 			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"first\" AND year = #{year} "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"last\" AND year = #{year} ) as member_victory "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"draw\" AND year = #{year} "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"draw\" AND year = #{year} ) AS member_draw "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
+			+ "first_player = a.member_name AND result = \"last\" AND year = #{year} "
+			+ "OR "
+			+ "last_player = a.member_name AND result = \"first\" AND year = #{year} ) AS member_defeat "
+			+ "FROM member a")
+	public List<MemberDto> selectDateYearInfo(@Param("year") String year);
+	
+	@Results({
+		@Result(property = "memberName", column = "member_name"),
+		@Result(property = "memberVictory", column = "member_victory"),
+		@Result(property = "memberDraw", column = "member_draw"),
+		@Result(property = "memberDefeat", column = "member_defeat")
+	})
+	@Select("SELECT DISTINCT member_name "
+			+ ", (SELECT COUNT(*) FROM match_info_list "
+			+ "WHERE "
 			+ "first_player = a.member_name AND result = \"first\" AND year = #{year} AND month = #{month} "
 			+ "OR "
 			+ "last_player = a.member_name AND result = \"last\" AND year = #{year} AND month = #{month} ) as member_victory "
