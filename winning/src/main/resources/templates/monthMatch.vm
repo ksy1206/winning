@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	<title>Winning</title>
+	#parse("/common/header.vm")
+	#parse("/common/script.vm")
+</head>
+<body style="max-width:400px; margin:5px; border:1px solid #ccc">
+
+	## 메뉴
+	#parse("/common/nav.vm")
+	<div class="w3-panel">
+		<div class="w3-row">
+			<div class="w3-col w3-container" style="width:33%">
+				<select class="w3-select w3-border" name="year" id="year">
+					<option value="2017" #if($Year == '2017') selected #end>2017</option>
+					<option value="2018" #if($Year == '2018') selected #end>2018</option>
+					<option value="2019" #if($Year == '2019') selected #end>2019</option>
+				</select>
+			</div>
+			<div class="w3-col w3-container" style="width:33%">
+				<select class="w3-select w3-border" name="month" id="month">
+					<option value="01" #if($Month == '01') selected #end>1월</option>
+					<option value="02" #if($Month == '02') selected #end>2월</option>
+					<option value="03" #if($Month == '03') selected #end>3월</option>
+					<option value="04" #if($Month == '04') selected #end>4월</option>
+					<option value="05" #if($Month == '05') selected #end>5월</option>
+					<option value="06" #if($Month == '06') selected #end>6월</option>
+					<option value="07" #if($Month == '07') selected #end>7월</option>
+					<option value="08" #if($Month == '08') selected #end>8월</option>
+					<option value="09" #if($Month == '09') selected #end>9월</option>
+					<option value="10" #if($Month == '10') selected #end>10월</option>
+					<option value="11" #if($Month == '11') selected #end>11월</option>
+					<option value="12" #if($Month == '12') selected #end>12월</option>
+				</select>
+			</div>
+			<div class="w3-col w3-container" style="width:33%">
+				<button class="w3-button w3-block w3-red" onclick="app.changeData();">검색</button>
+			</div>
+		</div>
+		<hr>
+
+		<div class="w3-panel w3-pale-blue w3-leftbar w3-rightbar w3-border-blue">
+			<p class="w3-large"><i>"$Year년 $Month월 랭킹"</i></p>
+		</div>
+		<table class="w3-table-all w3-center" style="margin-top:1em; margin-bottom: 1em;">
+			<thead>
+				<tr class="w3-green">
+					<th>랭킹</th>
+					<th>이름</th>
+					<th>승점</th>
+					<th>승</th>
+					<th>무</th>
+					<th>패</th>
+				</tr>
+			</thead>
+			#set($ranking = 1)
+			#foreach($row in $MonthRanking)
+			<tr>
+				<td>$ranking등</td>
+				<td>$row.memberName</td>
+				<td><span>$!row.memberPoint</span></td>
+				<td><span>$!row.memberVictory</span></td>
+				<td><span>$!row.memberDraw</span></td>
+				<td><span>$!row.memberDefeat</span></td>
+			</tr>
+			#set($ranking = $ranking+1)
+			#end
+		</table>
+	</div>
+
+</body>
+<script>
+	function App() {
+		var _this = this;
+
+		_this.changeData = function() {
+			var year = $('#year').val();
+			var month = $('#month').val();
+			
+			location.href="/monthMatchInfo?year="+year+"&month="+month;
+		}
+	};
+	
+	var app = new App();
+</script>
+</html> 

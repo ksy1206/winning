@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	<title>Winning</title>
+	#parse("/common/header.vm")
+	#parse("/common/script.vm")
+	<link rel="stylesheet" href="//code.jquery.com/ui/jquery-ui-git.css">
+</head>
+<body style="max-width:400px; margin:5px; border:1px solid #ccc">
+
+	## 메뉴
+	#parse("/common/nav.vm")
+	<br>
+	<div class="w3-panel w3-center w3-row">
+		<div class="w3-col w3-container" style="width:30%">
+			<p>날짜</p>
+		</div>
+		<div class="w3-col w3-container" style="width:68%">
+			<p><input type="text" id="datepicker"></p>
+		</div>
+	</div>
+	<hr>
+	<div class="w3-panel w3-center">
+		<div class="w3-row">
+			<div class="w3-col w3-container" style="width:40%">
+				<select class="w3-select w3-border" id="firstPlayer">
+					<option value="">Player1</option>
+					<option value="권세윤">권세윤</option>
+					<option value="장진수">장진수</option>
+					<option value="장휘진">장휘진</option>
+				</select>
+			</div>
+			<div class="w3-col w3-container" style="width:18%">
+				<p>VS</p>
+			</div>
+			<div class="w3-col w3-container" style="width:40%">
+				<select class="w3-select w3-border" id="lastPlayer">
+					<option value="">Player2</option>
+					<option value="권세윤">권세윤</option>
+					<option value="장진수">장진수</option>
+					<option value="장휘진">장휘진</option>
+				</select>
+			</div>
+		</div>
+		<hr>
+		<div class="w3-row w3-container">
+			<select class="w3-select w3-border" id="result">
+				<option value="">결과</option>
+				<option value="first">Player1 승</option>
+				<option value="draw">무승부</option>
+				<option value="last">Player2 승</option>
+			</select>
+		</div>
+		<hr>
+		<div class="w3-row w3-container">
+			<button class="w3-button w3-block w3-black" onclick="app.saveMatch();">등록</button>
+		</div>
+	</div>
+
+<script>
+	$(function() {
+		$("#datepicker").datepicker({
+			dateFormat: 'yy-mm-dd'
+		});
+	});
+</script>
+<script>
+	function App() {
+		var _this = this;
+
+		_this.saveMatch = function() {
+			var insertDate = $('#datepicker').val();
+			var firstPlayer = $('#firstPlayer').val();
+			var lastPlayer = $('#lastPlayer').val();
+			var result = $('#result').val();
+			
+			if(insertDate == "") {
+				alert("날짜를 입력 하세요.");
+				return false;
+			}
+			if(firstPlayer == "") {
+				alert("Player1을 선택 하세요.");
+				return false;
+			}
+			if(lastPlayer == "") {
+				alert("Player2를 선택 하세요.");
+				return false;
+			}
+			if(result == "") {
+				alert("결과를 선택 하세요.");
+				return false;
+			}
+			
+			var params = {
+				insertDate : insertDate,
+				firstPlayer : firstPlayer,
+				lastPlayer : lastPlayer,
+				result : result
+			}
+			
+			var url = "/ajax/saveMatchInfo";
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data: params,
+				success: function(result) {
+					alert("등록이 완료 되었습니다.\n일일경기 정보 페이지로 이동 합니다.");
+					location.href="/dailyMatchInfo?insertDate="+insertDate;
+				},
+				error: function(result) {
+					alert("Error!!");
+				}
+			});
+			
+		}
+		
+	};
+	
+	var app = new App();
+</script>
+</body>
+</html> 

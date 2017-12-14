@@ -70,11 +70,46 @@
 						<span class="w3-red">승</span>
 					#end
 				</td>
-				<td><i class="fa fa-trash" aria-hidden="true"></i></td>
+				<td><i class="fa fa-trash" aria-hidden="true" onclick="app.deleteMatch('$!row.matchNo');"></i></td>
 			</tr>
 			#end
 		</table>
 	</div>
 
 </body>
+<script>
+	function App() {
+		var _this = this;
+
+		## 경기 결과 삭제
+		_this.deleteMatch = function(matchNo) {
+			var result = confirm('정말 삭제하시겠습니까?');
+
+			if(!result) {
+				return false;
+			}
+
+			var url = '/ajax/matchInfoRemove?matchNo='+matchNo;
+			$.ajax({
+				url: url,
+				type: 'POST',
+				success: function(result) {
+					alert("경기정보 삭제 완료.");
+					location.reload();
+				},
+				error: function(result) {
+					alert("Error!!");
+				}
+			});
+		};
+
+
+		## Init
+		_this.init = function() {
+
+		}();
+	};
+	
+	var app = new App();
+</script>
 </html> 

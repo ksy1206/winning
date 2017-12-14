@@ -5,8 +5,11 @@ import lombok.Data;
 @Data
 public class MatchDto {
 
-	// 경기 번호
+	// Last_match_info 번호
 	private Integer		no;
+	
+	// Match_info_list 번호
+	private Integer		matchNo;
 
 	// 첫번째 선수 & 팀 정보
 	private Integer		firstTeamNo;
@@ -23,4 +26,8 @@ public class MatchDto {
 	// 경기 결과
 	private String		result;
 	private String		insertDate;
+	
+	// 년 월 구분
+	private String		year;
+	private String		month;
 }

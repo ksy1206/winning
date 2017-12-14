@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,11 +43,12 @@ public class MainController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String main(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
 		
+		String thisYear = CalenderUtil.getYear();
 		String thisMonth = CalenderUtil.getMonth();
 		
 		List<MemberDto> allRanking = mService.getMemberAllMatchInfo();
-		List<MemberDto> monthRanking = mService.getMemberMonthInfo(thisMonth);
-		
+		List<MemberDto> monthRanking = mService.getMemberMonthInfo(thisYear, thisMonth);
+
 		Collections.sort(allRanking, new CompareSeqDesc());
 		Collections.sort(monthRanking, new CompareSeqDesc());
 		
@@ -171,8 +173,8 @@ public class MainController {
 	 */
 	@RequestMapping(value = "/ajax/allMatchResultSave", method = RequestMethod.POST)
 	@ResponseBody
-	public void allMatchRecord(HttpServletRequest request, HttpServletResponse response) {
-		mService.addAllMatchResultInfo();
+	public String allMatchRecord(HttpServletRequest request, HttpServletResponse response) {
+		return mService.addAllMatchResultInfo();
 	}
 
 	@RequestMapping(value = "/dailyGroup", method = RequestMethod.GET)
@@ -203,5 +205,60 @@ public class MainController {
 			// TODO Auto-generated method stub
 			return o1.getMemberPoint() > o2.getMemberPoint() ? -1 : o1.getMemberPoint() < o2.getMemberPoint() ? 1 : 0;
 		}
+	}
+	
+	
+	@RequestMapping(value = "/ajax/matchInfoRemove", method = RequestMethod.POST)
+	@ResponseBody
+	public void matchInfoRemove(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "matchNo") int matchNo) {
+		mService.removeMatchInfo(matchNo);
+	}
+	
+	@RequestMapping(value = "/ajax/removeMatchInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public void removeMatchInfo(HttpServletRequest request, HttpServletResponse response) {
+		mService.removeMatchInfo();
+	}
+	
+	@RequestMapping(value = "/monthMatchInfo", method = RequestMethod.GET)
+	public String monthMatchInfo(HttpServletRequest request, HttpServletResponse response, Model model
+			, @RequestParam(value = "year", required = false, defaultValue = "") String year
+			, @RequestParam(value = "month", required = false, defaultValue = "") String month) throws Exception {
+		
+		if("".equals(year)) {
+			year = CalenderUtil.getYear();
+			month = CalenderUtil.getMonth();
+		}
+		
+		List<MemberDto> monthRanking = mService.getMemberMonthInfo(year, month);
+		Collections.sort(monthRanking, new CompareSeqDesc());
+
+		model.addAttribute("MonthRanking", monthRanking);
+		model.addAttribute("Year", year);
+		model.addAttribute("Month", month);
+		
+		return "monthMatch";
+	}
+	
+	@RequestMapping(value = "/saveMatch", method = RequestMethod.GET)
+	public String saveMatch(HttpServletRequest request, HttpServletResponse response, Model model) {
+		List<TeamDto> teamList = mService.getTeamList();
+		model.addAttribute("TeamList", teamList);
+		
+		return "saveMatch";
+	}
+	
+	@RequestMapping(value = "/ajax/saveMatchInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public void saveMatchInfo(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("MatchInfo") MatchDto matchDto) {
+		mService.addMatchResultInfo(matchDto);
+	}
+	
+	@RequestMapping(value = "/betweens", method = RequestMethod.GET)
+	public String betweens(HttpServletRequest request, HttpServletResponse response, Model model) {
+//		List<TeamDto> teamList = mService.getTeamList();
+//		model.addAttribute("TeamList", teamList);
+		
+		return "betweens";
 	}
 }

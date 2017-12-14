@@ -61,14 +61,34 @@ public class MainService {
 		mMapper.updateMatchResultInfo(no, result);
 	}
 	
+	// 대진표 삭제
+	public void removeMatchInfo() {
+		mMapper.deleteLastMatchInfo();
+	}
+
 	// 전체 매칭 정보 기록실로 이관하기
 	@Transactional
-	public void addAllMatchResultInfo() {
+	public String addAllMatchResultInfo() {
 		List<MatchDto> resultList = mMapper.selectLastMatchInfo();
+		String returnDate = "";
 		for(int i=0; i<resultList.size(); i++) {
+			String insertDate = resultList.get(i).getInsertDate();
+			String[] data = insertDate.split("-");
+			resultList.get(i).setYear(data[0]);
+			resultList.get(i).setMonth(data[1]);
 			mMapper.insertMatchInfoList(resultList.get(i));
+			returnDate = insertDate;
 		}
 		mMapper.deleteLastMatchInfo();
+		return returnDate;
+	}
+	
+	// 단일 매칭 경기 결과 기록실 저장
+	public void addMatchResultInfo(MatchDto matchDto) {
+		String[] data = matchDto.getInsertDate().split("-");
+		matchDto.setYear(data[0]);
+		matchDto.setMonth(data[1]);
+		mMapper.insertMatchInfoList(matchDto);
 	}
 	
 	// 일별 경기 기록 가져오기
@@ -93,8 +113,11 @@ public class MainService {
 	}
 	
 	// 월별 랭킹
-	public List<MemberDto> getMemberMonthInfo(String insertDate) {
-		log.error("@@@@@"+insertDate);
-		return mMapper.selectMemberMonthInfo(insertDate);
+	public List<MemberDto> getMemberMonthInfo(String year, String month) {
+		return mMapper.selectDateMonthInfo(year, month);
+	}
+	
+	public void removeMatchInfo(int matchNo) {
+		mMapper.deleteMatchInfo(matchNo);
 	}
 }

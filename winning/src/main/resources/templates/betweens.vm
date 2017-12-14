@@ -10,16 +10,12 @@
 	## 메뉴
 	#parse("/common/nav.vm")
 	<br>
-	<div id="piechart"></div>
-
 	<div class="w3-panel">
-		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> 이번 달 랭킹 ($!ThisMonth 월)</p>
+		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> 권세윤 VS...</p>
 		<table class="w3-table-all w3-center" style="margin-top:1em; margin-bottom: 1em;">
 			<thead>
 				<tr class="w3-green">
-					<th>랭킹</th>
 					<th>이름</th>
-					<th>승점</th>
 					<th>승</th>
 					<th>무</th>
 					<th>패</th>
@@ -28,9 +24,7 @@
 			#set($ranking = 1)
 			#foreach($row in $MonthRanking)
 			<tr>
-				<td>$ranking등</td>
 				<td>$row.memberName</td>
-				<td><span>$!row.memberPoint</span></td>
 				<td><span>$!row.memberVictory</span></td>
 				<td><span>$!row.memberDraw</span></td>
 				<td><span>$!row.memberDefeat</span></td>
@@ -39,24 +33,20 @@
 			#end
 		</table>
 		<hr>
-		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> 통합 랭킹</p>
+		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> 장휘진 VS...</p>
 		<table class="w3-table-all w3-center" style="margin-top:1em; margin-bottom: 1em;">
 			<thead>
 				<tr class="w3-green">
-					<th>랭킹</th>
 					<th>이름</th>
-					<th>승점</th>
 					<th>승</th>
 					<th>무</th>
 					<th>패</th>
 				</tr>
 			</thead>
 			#set($ranking = 1)
-			#foreach($row in $AllRanking)
+			#foreach($row in $MonthRanking)
 			<tr>
-				<td>$ranking등</td>
 				<td>$row.memberName</td>
-				<td><span>$!row.memberPoint</span></td>
 				<td><span>$!row.memberVictory</span></td>
 				<td><span>$!row.memberDraw</span></td>
 				<td><span>$!row.memberDefeat</span></td>
@@ -64,32 +54,29 @@
 			#set($ranking = $ranking+1)
 			#end
 		</table>
-	</div>
-
-	## 구글 차트
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-	
-	<script type="text/javascript">
-		## Load google charts
-		google.charts.load('current', {'packages':['corechart']});
-		google.charts.setOnLoadCallback(drawChart);
-		
-		## Draw the chart and set the chart values
-		function drawChart() {
-			var data = google.visualization.arrayToDataTable([
-			['Task', 'Hours per Day']
+		<hr>
+		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> 장진수 VS...</p>
+		<table class="w3-table-all w3-center" style="margin-top:1em; margin-bottom: 1em;">
+			<thead>
+				<tr class="w3-green">
+					<th>이름</th>
+					<th>승</th>
+					<th>무</th>
+					<th>패</th>
+				</tr>
+			</thead>
+			#set($ranking = 1)
 			#foreach($row in $MonthRanking)
-			,["$!row.memberName", $!row.memberPoint]
+			<tr>
+				<td>$row.memberName</td>
+				<td><span>$!row.memberVictory</span></td>
+				<td><span>$!row.memberDraw</span></td>
+				<td><span>$!row.memberDefeat</span></td>
+			</tr>
+			#set($ranking = $ranking+1)
 			#end
-		]);
-		
-			## Optional; add a title and set the width and height of the chart
-			var options = {'title':"이번 달 승점 정보 ($!ThisMonth 월)"};
-		
-			## Display the chart inside the <div> element with id="piechart"
-			var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-			chart.draw(data, options);
-		}
-	</script>
+		</table>
+		<hr>
+	</div>
 </body>
 </html> 

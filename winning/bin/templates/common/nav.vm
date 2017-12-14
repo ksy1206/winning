@@ -10,7 +10,7 @@
 		<i class="fa fa-square-o" aria-hidden="true"></i> 대진표
 	</a>
 	<hr>
-	<a class="w3-bar-item w3-button" href="#">
+	<a class="w3-bar-item w3-button" href="/monthMatchInfo">
 		<i class="fa fa-square-o" aria-hidden="true"></i> 월별 기록
 	</a>
 	<hr>
@@ -18,10 +18,14 @@
 		<i class="fa fa-square-o" aria-hidden="true"></i> 일별 기록
 	</a>
 	<hr>
-	<a class="w3-bar-item w3-button" href="#">
+	<a class="w3-bar-item w3-button" href="/saveMatch">
 		<i class="fa fa-square-o" aria-hidden="true"></i> 기록실
 	</a>
 	<hr>
+##	<a class="w3-bar-item w3-button" href="/betweens">
+##		<i class="fa fa-square-o" aria-hidden="true"></i> 상대전적
+##	</a>
+##	<hr>
 </nav>
 
 <header class="w3-bar w3-card w3-theme">

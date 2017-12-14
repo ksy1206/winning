@@ -30,6 +30,9 @@ public interface MainMapper {
 
 	@Delete("DELETE FROM last_match_info")
 	public void deleteLastMatchInfo();
+	
+	@Delete("DELETE FROM match_info_list WHERE match_no = #{matchNo}")
+	public void deleteMatchInfo(@Param("matchNo") int matchNo);
 
 
 	@Results({
@@ -45,9 +48,9 @@ public interface MainMapper {
 	public List<MatchDto> selectLastMatchInfo();
 
 	@Insert("INSERT INTO match_info_list "
-			+ "(first_team_no, first_player, last_team_no, last_player, result, insert_date) "
+			+ "(first_team_no, first_player, last_team_no, last_player, result, insert_date, year, month) "
 			+ "VALUES "
-			+ "(#{firstTeamNo}, #{firstPlayer}, #{lastTeamNo}, #{lastPlayer}, #{result}, #{insertDate})")
+			+ "(#{firstTeamNo}, #{firstPlayer}, #{lastTeamNo}, #{lastPlayer}, #{result}, #{insertDate}, #{year}, #{month})")
 	public void insertMatchInfoList(MatchDto data);
 	
 
@@ -78,7 +81,7 @@ public interface MainMapper {
 	public List<String> selectGroupByInsertDateMatchInfo();
 	
 	@Results({
-		@Result(property = "no", column = "no"),
+		@Result(property = "matchNo", column = "match_no"),
 		@Result(property = "firstTeamNo", column = "first_team_no"),
 		@Result(property = "firstPlayer", column = "first_player"),
 		@Result(property = "lastTeamNo", column = "last_team_no"),
@@ -150,19 +153,19 @@ public interface MainMapper {
 	@Select("SELECT DISTINCT member_name "
 			+ ", (SELECT COUNT(*) FROM match_info_list "
 			+ "WHERE "
-			+ "first_player = a.member_name AND result = \"first\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") "
+			+ "first_player = a.member_name AND result = \"first\" AND year = #{year} AND month = #{month} "
 			+ "OR "
-			+ "last_player = a.member_name AND result = \"last\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") ) as member_victory "
+			+ "last_player = a.member_name AND result = \"last\" AND year = #{year} AND month = #{month} ) as member_victory "
 			+ ", (SELECT COUNT(*) FROM match_info_list "
 			+ "WHERE "
-			+ "first_player = a.member_name AND result = \"draw\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") "
+			+ "first_player = a.member_name AND result = \"draw\" AND year = #{year} AND month = #{month} "
 			+ "OR "
-			+ "last_player = a.member_name AND result = \"draw\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\")) AS member_draw "
+			+ "last_player = a.member_name AND result = \"draw\" AND year = #{year} AND month = #{month} ) AS member_draw "
 			+ ", (SELECT COUNT(*) FROM match_info_list "
 			+ "WHERE "
-			+ "first_player = a.member_name AND result = \"last\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") "
+			+ "first_player = a.member_name AND result = \"last\" AND year = #{year} AND month = #{month} "
 			+ "OR "
-			+ "last_player = a.member_name AND result = \"first\" AND insert_date LIKE CONCAT(#{insertDate}, \"%\") ) AS member_defeat "
+			+ "last_player = a.member_name AND result = \"first\" AND year = #{year} AND month = #{month} ) AS member_defeat "
 			+ "FROM member a")
-	public List<MemberDto> selectMemberMonthInfo(@Param("insertDate") String insertDate);
+	public List<MemberDto> selectDateMonthInfo(@Param("year") String year, @Param("month") String month);
 }
