@@ -10,4 +10,6 @@ public class TeamDto {
 	private String		teamName;
 	private String		teamImgName;
 	private String		player;
+	private String		group;
+	private String		useYn;
 }

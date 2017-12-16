@@ -22,8 +22,26 @@ public class MainService {
 	private MainMapper mMapper;
 	
 	// 팀 목록 가져오기
-	public List<TeamDto> getTeamList() {
-		return mMapper.selectTeamList();
+	public List<TeamDto> getTeamList(String type) {
+		return mMapper.selectTeamList(type);
+	}
+	
+	// 팀 목록 셋팅하기
+	@Transactional
+	public void updateSettingTeam(String[] teamNoListY, String[] teamNoListN) {
+		
+		// 팀 Y목록 업데이트
+		for(int i=0; i<teamNoListY.length; i++) {
+			int team_no = Integer.parseInt(teamNoListY[i]);
+			mMapper.updateTeamInfo("Y", team_no);
+		}
+		
+		// 팀 N목록 업데이트
+		for(int j=0; j<teamNoListN.length; j++) {
+			int team_no = Integer.parseInt(teamNoListN[j]);
+			mMapper.updateTeamInfo("N", team_no);
+		}
+		
 	}
 
 	// 경기 매칭 정보 가져오기

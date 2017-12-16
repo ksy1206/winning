@@ -10,9 +10,12 @@
 	#parse("/common/nav.vm")
 
 	<div class="w3-panel">
+	
+		#if($MatchInfo.size() <= 0)
 		<div>
 			<button class="w3-button w3-block w3-black" onclick="app.matchRecord();"><b>대진표 생성</b></button>
 		</div>
+		#end
 
 		#set($count = 1)
 		

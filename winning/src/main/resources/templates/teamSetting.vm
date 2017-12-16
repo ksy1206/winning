@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	<title>Winning</title>
+	#parse("/common/header.vm")
+	#parse("/common/script.vm")
+</head>
+<body style="max-width:400px; margin:5px; border:1px solid #ccc">
+
+	## 메뉴
+	#parse("/common/nav.vm")
+
+	<div class="w3-panel">
+		<ul class="w3-ul w3-card-4">
+			<li class="w3-bar w3-green">
+				<div class="w3-bar-item">
+					<span class="w3-large">총 $TeamList.size() 팀</span><br>
+				</div>
+			</li>
+			#foreach($row in $TeamList)
+			<li class="w3-bar">
+				<span onclick="" class="w3-bar-item w3-white w3-xlarge w3-right">
+					<input class="w3-check" type="checkbox" data-role="team-list" data-team-no="$!row.teamNo"  #if($row.useYn == "Y") checked #end>
+				</span>
+				#set($imgName = $row.teamImgName + ".png")
+				<img src="/img/team/$imgName" class="w3-bar-item w3-circle" style="width:75px">
+				<div class="w3-bar-item">
+					<span class="w3-large">$!row.teamName</span><br>
+					<span>$!row.group</span>
+				</div>
+			</li>
+			#end
+			<li class="w3-bar">
+				<div>
+					<button class="w3-button w3-block w3-black" onclick="app.saveTeamSetting();"><b>저장</b></button>
+				</div>
+			</li>
+		</ul>
+	</div>
+<script>
+	function App() {
+		var _this = this;
+
+		## 팀 설정 저장
+		_this.saveTeamSetting = function() {
+			var teamNoList_y = [];
+			var teamNoList_n = [];
+			var sucessCount = 0;
+			$('*[data-role=team-list]').each(function() {
+				var row = $(this);
+				
+				if(row.prop("checked")) {
+					teamNoList_y.push(row.data('team-no'));
+					sucessCount = sucessCount + 1;
+				} else {
+					teamNoList_n.push(row.data('team-no'));
+				}
+			});
+			
+			if(sucessCount < 12) {
+				alert("팀은 최소 12팀 이상 선택하셔야 합니다.");
+				return false;
+			}
+			
+			var data = {
+				teamNoListY : JSON.stringify(teamNoList_y),
+				teamNoListN : JSON.stringify(teamNoList_n)
+			}
+
+			var url = '/ajax/saveTeamSetting';
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data : data,
+				success: function(result) {
+					alert("팀 설정 완료.");
+					location.reload();
+				},
+				error: function(result) {
+					alert("Error!!");
+				}
+			});
+		};
+
+
+		## Init
+		_this.init = function() {
+
+		}();
+	};
+	
+	var app = new App();
+</script>
+</body>
+</html> 

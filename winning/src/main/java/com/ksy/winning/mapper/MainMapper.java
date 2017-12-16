@@ -23,10 +23,21 @@ public interface MainMapper {
 		@Result(property = "teamNo", column = "team_no"),
 		@Result(property = "teamName", column = "team_name"),
 		@Result(property = "teamImgName", column = "team_img_name"),
+		@Result(property = "group", column = "group"),
+		@Result(property = "useYn", column = "use_yn")
 	})
-	@Select("SELECT * FROM team")
-	public List<TeamDto> selectTeamList();
+	@Select("<script>"
+			+ "SELECT * FROM team "
+			+ "<if test = 'type != \"ALL\"'>"
+			+ " WHERE use_yn = \"Y\" "
+			+ "</if>"
+			+ "ORDER BY team_no ASC"
+			+ "</script>")
+	public List<TeamDto> selectTeamList(@Param("type") String type);
 
+	
+	@Update("UPDATE team SET use_yn = #{useYn} WHERE team_no = #{teamNo}")
+	public void updateTeamInfo(@Param("useYn") String useYn, @Param("teamNo") int teamNo);
 
 	@Delete("DELETE FROM last_match_info")
 	public void deleteLastMatchInfo();

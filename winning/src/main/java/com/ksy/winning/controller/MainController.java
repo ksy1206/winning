@@ -1,5 +1,6 @@
 package com.ksy.winning.controller;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ksy.winning.dto.MatchDto;
 import com.ksy.winning.dto.MemberDto;
 import com.ksy.winning.dto.TeamDto;
@@ -30,6 +34,8 @@ public class MainController {
 
 	@Autowired
 	private MainService mService;
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	/**
 	 * Index 페이지 이동
@@ -74,7 +80,7 @@ public class MainController {
 	@RequestMapping(value = "/match", method = RequestMethod.GET)
 	public String moveMatch(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
 		List<MatchDto> matchInfo = mService.getLastMatchInfo(); // 경기 정보
-		List<TeamDto> teamList = mService.getTeamList(); // Default 팀 정보
+		List<TeamDto> teamList = mService.getTeamList("ALL"); // Default 팀 정보
 
 		for (int i = 0; i < matchInfo.size(); i++) {
 			for (int j = 0; j < teamList.size(); j++) {
@@ -94,7 +100,27 @@ public class MainController {
 		model.addAttribute("MatchInfo", matchInfo);
 		return "match";
 	}
+	
+	@RequestMapping(value = "/teamSetting", method = RequestMethod.GET)
+	public String teamSetting(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+		List<TeamDto> teamList = mService.getTeamList("ALL"); // Default 팀 정보
+		model.addAttribute("TeamList", teamList);
+		return "teamSetting";
+	}
 
+	@RequestMapping(value = "/ajax/saveTeamSetting", method = RequestMethod.POST)
+	@ResponseBody
+	public void saveTeamSetting(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "teamNoListY") String teamYlist,
+			@RequestParam(value = "teamNoListN") String teamNlist) throws Exception {
+
+			String[] teamNoListY = objectMapper.readValue(teamYlist, String[].class); // 사용 팀 리스트
+			String[] teamNoListN = objectMapper.readValue(teamNlist, String[].class); // 사용하지 않는 팀 리스트
+
+			mService.updateSettingTeam(teamNoListY, teamNoListN);
+
+	}
+	
 	/**
 	 * 대진표 생성
 	 * 
@@ -106,7 +132,7 @@ public class MainController {
 	@ResponseBody
 	public void matchRecord(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "type", required = false, defaultValue = "first") String type) {
-		List<TeamDto> teamList = mService.getTeamList();
+		List<TeamDto> teamList = mService.getTeamList("Y");
 
 		// 리트스 랜덤 처리
 		Collections.shuffle(teamList);
@@ -245,7 +271,7 @@ public class MainController {
 	
 	@RequestMapping(value = "/saveMatch", method = RequestMethod.GET)
 	public String saveMatch(HttpServletRequest request, HttpServletResponse response, Model model) {
-		List<TeamDto> teamList = mService.getTeamList();
+		List<TeamDto> teamList = mService.getTeamList("ALL");
 		model.addAttribute("TeamList", teamList);
 		
 		return "saveMatch";
