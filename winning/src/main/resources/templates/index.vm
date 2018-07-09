@@ -9,8 +9,6 @@
 
 	## 메뉴
 	#parse("/common/nav.vm")
-	<br>
-	<div id="piechart"></div>
 
 	<div class="w3-panel">
 		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> 이번 달 랭킹 ($!ThisMonth 월)</p>
@@ -38,11 +36,12 @@
 			#set($ranking = $ranking+1)
 			#end
 		</table>
-				<hr>
+		<hr>
+
 		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> $!ThisYear 년 랭킹</p>
 		<table class="w3-table-all w3-center" style="margin-top:1em; margin-bottom: 1em;">
 			<thead>
-				<tr class="w3-green">
+				<tr style="background-color:#2386d4;color: white;">
 					<th>랭킹</th>
 					<th>이름</th>
 					<th>승점</th>
@@ -65,10 +64,11 @@
 			#end
 		</table>
 		<hr>
+
 		<p><i class="fa fa-chevron-right" aria-hidden="true"></i> 통합 랭킹</p>
 		<table class="w3-table-all w3-center" style="margin-top:1em; margin-bottom: 1em;">
 			<thead>
-				<tr class="w3-green">
+				<tr style="background-color:#ea564c;color: white;">
 					<th>랭킹</th>
 					<th>이름</th>
 					<th>승점</th>
@@ -91,31 +91,5 @@
 			#end
 		</table>
 	</div>
-
-	## 구글 차트
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-	
-	<script type="text/javascript">
-		## Load google charts
-		google.charts.load('current', {'packages':['corechart']});
-		google.charts.setOnLoadCallback(drawChart);
-		
-		## Draw the chart and set the chart values
-		function drawChart() {
-			var data = google.visualization.arrayToDataTable([
-			['Task', 'Hours per Day']
-			#foreach($row in $MonthRanking)
-			,["$!row.memberName", $!row.memberPoint]
-			#end
-		]);
-		
-			## Optional; add a title and set the width and height of the chart
-			var options = {'title':"이번 달 승점 정보 ($!ThisMonth 월)"};
-		
-			## Display the chart inside the <div> element with id="piechart"
-			var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-			chart.draw(data, options);
-		}
-	</script>
 </body>
 </html> 

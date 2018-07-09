@@ -72,7 +72,7 @@
 					<button class="w3-button w3-block w3-black" onclick="app.removeMatchInfo();">대진표 삭제</button>
 				</div>
 				<div class="w3-col s4">
-					<button class="w3-button w3-block w3-green" onclick="app.addMatch();">경기 추가</button>
+					<button class="w3-button w3-block w3-green" onclick="app.addMatch();">3경기 추가</button>
 				</div>
 				<div class="w3-col s4">
 					<button class="w3-button w3-block w3-blue" onclick="app.saveMatchResultAll();">저장</button>
@@ -81,8 +81,7 @@
 			<hr>
 		#else
 			<div class="w3-panel w3-green w3-topbar w3-bottombar w3-border-amber">
-				<p><b>대진표를 생성해 주세요.</b></p>
-				<p>대진표는 전경기 꼴찌가 생성합니다...</p>
+				<p>대진표를 생성해 주세요.</p>
 			</div>
 		#end
 	</div>
