@@ -12,9 +12,6 @@ import com.ksy.winning.dto.TeamDto;
 import com.ksy.winning.mapper.MainMapper;
 import com.ksy.winning.util.CalenderUtil;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class MainService {
 

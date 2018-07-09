@@ -1,6 +1,5 @@
 package com.ksy.winning.controller;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ksy.winning.dto.MatchDto;
 import com.ksy.winning.dto.MemberDto;
@@ -26,9 +23,6 @@ import com.ksy.winning.dto.TeamDto;
 import com.ksy.winning.service.MainService;
 import com.ksy.winning.util.CalenderUtil;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Controller
 public class MainController {
 
