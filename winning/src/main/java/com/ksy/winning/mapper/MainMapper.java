@@ -204,4 +204,16 @@ public interface MainMapper {
 			+ "last_player = a.member_name AND result = \"first\" AND year = #{year} AND month = #{month} ) AS member_defeat "
 			+ "FROM member a")
 	public List<MemberDto> selectDateMonthInfo(@Param("year") String year, @Param("month") String month);
+	
+	// 상대 전적 승
+	@Select("SELECT COUNT(*) FROM match_info_list WHERE first_player = #{name} AND last_player = #{vsName} AND result = \"first\" OR first_player = #{vsName} AND last_player = #{name} AND result = \"last\";")
+	public int getVSInfoVictory(@Param("name") String name, @Param("vsName") String vsName);
+	
+	// 상대 전적 무승부
+	@Select("SELECT COUNT(*) FROM match_info_list WHERE first_player = #{name} AND last_player = #{vsName} AND result = \"draw\" OR first_player = #{vsName} AND last_player = #{name} AND result = \"draw\";")
+	public int getVSInfoDraw(@Param("name") String name, @Param("vsName") String vsName);
+	
+	// 상대 전적 패
+	@Select("SELECT COUNT(*) FROM match_info_list WHERE first_player = #{name} AND last_player = #{vsName} AND result = \"last\" OR first_player = #{vsName} AND last_player = #{name} AND result = \"first\";")
+	public int getVSInfoDefeat(@Param("name") String name, @Param("vsName") String vsName);
 }

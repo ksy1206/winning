@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ksy.winning.dto.MatchDto;
 import com.ksy.winning.dto.MemberDto;
 import com.ksy.winning.dto.TeamDto;
+import com.ksy.winning.dto.VsDto;
 import com.ksy.winning.service.MainService;
 import com.ksy.winning.util.CalenderUtil;
 
@@ -276,6 +277,13 @@ public class MainController {
 	public void saveMatchInfo(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("MatchInfo") MatchDto matchDto) {
 		mService.addMatchResultInfo(matchDto);
 	}
+
+	// vs정보
+	@RequestMapping(value = "/ajax/vsInfo", method = RequestMethod.GET)
+	@ResponseBody
+	public VsDto vsInfo(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("name") String name) {
+		return mService.getVsInfo(name);
+	};
 	
 	@RequestMapping(value = "/betweens", method = RequestMethod.GET)
 	public String betweens(HttpServletRequest request, HttpServletResponse response, Model model) {

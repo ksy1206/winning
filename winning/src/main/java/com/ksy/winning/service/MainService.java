@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ksy.winning.dto.MatchDto;
 import com.ksy.winning.dto.MemberDto;
 import com.ksy.winning.dto.TeamDto;
+import com.ksy.winning.dto.VsDto;
 import com.ksy.winning.mapper.MainMapper;
 import com.ksy.winning.util.CalenderUtil;
 
@@ -139,5 +140,38 @@ public class MainService {
 	
 	public void removeMatchInfo(int matchNo) {
 		mMapper.deleteMatchInfo(matchNo);
+	}
+	
+	// 상대 전적 가져오기
+	public VsDto getVsInfo(String name) {
+		VsDto result = new VsDto();
+		
+		String p1Name = "";
+		String p2Name = "";
+		
+		if("권세윤".equals(name)) {
+			p1Name = "장진수";
+			p2Name = "장휘진";
+
+		} else if("장진수".equals(name)) {
+			p1Name = "권세윤";
+			p2Name = "장휘진";
+
+		} else if("장휘진".equals(name)) {
+			p1Name = "장진수";
+			p2Name = "권세윤";
+		}
+
+		result.setMemberNameP1(p1Name);
+		result.setMemberVictoryP1(mMapper.getVSInfoVictory(name, p1Name));
+		result.setMemberDrawP1(mMapper.getVSInfoDraw(name, p1Name));
+		result.setMemberDefeatP1(mMapper.getVSInfoDefeat(name, p1Name));
+		
+		result.setMemberNameP2(p2Name);
+		result.setMemberVictoryP2(mMapper.getVSInfoVictory(name, p2Name));
+		result.setMemberDrawP2(mMapper.getVSInfoDraw(name, p2Name));
+		result.setMemberDefeatP2(mMapper.getVSInfoDefeat(name, p2Name));
+		
+		return result;
 	}
 }
