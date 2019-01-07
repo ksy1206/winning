@@ -1,5 +1,6 @@
 package com.ksy.winning.controller;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -51,9 +52,9 @@ public class MainController {
 		List<MemberDto> yearRanking = mService.getYearMonthInfo(thisYear);
 		List<MemberDto> monthRanking = mService.getMemberMonthInfo(thisYear, thisMonth);
 
-		Collections.sort(allRanking, new CompareSeqDesc());
-		Collections.sort(yearRanking, new CompareSeqDesc());
-		Collections.sort(monthRanking, new CompareSeqDesc());
+		Collections.sort(allRanking, new ComparePointSeqDesc());
+		Collections.sort(yearRanking, new ComparePointSeqDesc());
+		Collections.sort(monthRanking, new ComparePointSeqDesc());
 
 		model.addAttribute("ThisMonth", thisMonth);
 		model.addAttribute("ThisYear", thisYear);
@@ -75,25 +76,119 @@ public class MainController {
 	@RequestMapping(value = "/match", method = RequestMethod.GET)
 	public String moveMatch(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
 		List<MatchDto> matchInfo = mService.getLastMatchInfo(); // 경기 정보
-		List<TeamDto> teamList = mService.getTeamList("ALL"); // Default 팀 정보
+		List<MemberDto> userList = new ArrayList<>();
+		List<MemberDto> FinalMatchInfo = new ArrayList<>();
 
-		for (int i = 0; i < matchInfo.size(); i++) {
-			for (int j = 0; j < teamList.size(); j++) {
-				// 첫번째 팀 정보 추가
-				if (matchInfo.get(i).getFirstTeamNo() == teamList.get(j).getTeamNo()) {
-					matchInfo.get(i).setFirstTeamName(teamList.get(j).getTeamName());
-					matchInfo.get(i).setFirstTeamImgName(teamList.get(j).getTeamImgName());
+		if(matchInfo.size() > 0) {
+			// 생성한 경기 정보가 있을경우.
+			List<TeamDto> teamList = mService.getTeamList("ALL"); // Default 팀 정보
+
+			for (int i = 0; i < matchInfo.size(); i++) {
+				for (int j = 0; j < teamList.size(); j++) {
+					// 첫번째 팀 정보 추가
+					if (matchInfo.get(i).getFirstTeamNo() == teamList.get(j).getTeamNo()) {
+						matchInfo.get(i).setFirstTeamName(teamList.get(j).getTeamName());
+						matchInfo.get(i).setFirstTeamImgName(teamList.get(j).getTeamImgName());
+					}
+					// 두번째 팀 정보 추가
+					if (matchInfo.get(i).getLastTeamNo() == teamList.get(j).getTeamNo()) {
+						matchInfo.get(i).setLastTeamName(teamList.get(j).getTeamName());
+						matchInfo.get(i).setLastTeamImgName(teamList.get(j).getTeamImgName());
+					}
 				}
-				// 두번째 팀 정보 추가
-				if (matchInfo.get(i).getLastTeamNo() == teamList.get(j).getTeamNo()) {
-					matchInfo.get(i).setLastTeamName(teamList.get(j).getTeamName());
-					matchInfo.get(i).setLastTeamImgName(teamList.get(j).getTeamImgName());
+			}
+			
+			userList = translateByMatchInfo(matchInfo);
+		} else {
+			// 생성한 경기 정보가 없을 경우
+			List<MatchDto> lastMatchInfo = mService.getFinalMatchInfo(); // 경기 정보
+			userList = translateByMatchInfo(lastMatchInfo);
+		}
+		
+		
+
+		model.addAttribute("MatchInfo", matchInfo);
+		model.addAttribute("Rank", userList);
+		model.addAttribute("FinalMatchInfo", FinalMatchInfo);
+		
+		return "match";
+	}
+	
+	// 메치 정보 승무패 할당 함수
+	public static List<MemberDto> translateByMatchInfo(List<MatchDto> matchInfo) {
+		MemberDto memberKsy = new MemberDto();
+		memberKsy.setMemberNo(1);
+		memberKsy.setMemberName("권세윤");
+		memberKsy.setMemberVictory(0);
+		memberKsy.setMemberDraw(0);
+		memberKsy.setMemberDefeat(0);
+		
+		MemberDto memberJjs = new MemberDto();
+		memberJjs.setMemberNo(2);
+		memberJjs.setMemberName("장진수");
+		memberJjs.setMemberVictory(0);
+		memberJjs.setMemberDraw(0);
+		memberJjs.setMemberDefeat(0);
+		
+		MemberDto memberJhj = new MemberDto();
+		memberJhj.setMemberNo(3);
+		memberJhj.setMemberName("장휘진");
+		memberJhj.setMemberVictory(0);
+		memberJhj.setMemberDraw(0);
+		memberJhj.setMemberDefeat(0);
+		
+		List<MemberDto> userList = new ArrayList<>();
+		userList.add(memberKsy);
+		userList.add(memberJjs);
+		userList.add(memberJhj);
+		
+		// Today Match 경기결과 정보
+		for(int j=0; j<matchInfo.size(); j++) {
+			
+			String result = matchInfo.get(j).getResult();
+			
+			if("first".equals(result)) {
+				String winner = matchInfo.get(j).getFirstPlayer();
+				String loser = matchInfo.get(j).getLastPlayer();
+				
+				for(int k=0; k<userList.size(); k++) {
+					if(winner.equals(userList.get(k).getMemberName())) {
+						userList.get(k).setMemberVictory(userList.get(k).getMemberVictory() + 1);
+					}
+					if(loser.equals(userList.get(k).getMemberName())) {
+						userList.get(k).setMemberDefeat(userList.get(k).getMemberDefeat() + 1);
+					}
+				}
+				
+			} else if ("last".equals(result)) {
+				String winner = matchInfo.get(j).getLastPlayer();
+				String loser = matchInfo.get(j).getFirstPlayer();
+				
+				for(int k=0; k<userList.size(); k++) {
+					if(winner.equals(userList.get(k).getMemberName())) {
+						userList.get(k).setMemberVictory(userList.get(k).getMemberVictory() + 1);
+					}
+					if(loser.equals(userList.get(k).getMemberName())) {
+						userList.get(k).setMemberDefeat(userList.get(k).getMemberDefeat() + 1);
+					}
+				}
+			} else if("draw".equals(result)) {
+				String winner = matchInfo.get(j).getFirstPlayer();
+				String loser = matchInfo.get(j).getLastPlayer();
+				
+				for(int k=0; k<userList.size(); k++) {
+					if(winner.equals(userList.get(k).getMemberName())) {
+						userList.get(k).setMemberDraw(userList.get(k).getMemberDraw() + 1);
+					}
+					if(loser.equals(userList.get(k).getMemberName())) {
+						userList.get(k).setMemberDraw(userList.get(k).getMemberDraw() + 1);
+					}
 				}
 			}
 		}
-
-		model.addAttribute("MatchInfo", matchInfo);
-		return "match";
+		
+		Collections.sort(userList, new ComparePointSeqDesc());
+		return userList;
 	}
 	
 	@RequestMapping(value = "/teamSetting", method = RequestMethod.GET)
@@ -214,7 +309,7 @@ public class MainController {
 		List<MatchDto> resultList = mService.getDailyMatchInfo(insertDate);
 		List<MemberDto> memberList = mService.getMemberDailyInfo(insertDate);
 		
-		Collections.sort(memberList, new CompareSeqDesc());
+		Collections.sort(memberList, new ComparePointSeqDesc());
 		
 		model.addAttribute("MatchInfo", resultList);
 		model.addAttribute("MemberList", memberList);
@@ -222,7 +317,7 @@ public class MainController {
 	}
 
 	// 정렬
-	static class CompareSeqDesc implements Comparator<MemberDto> {
+	static class ComparePointSeqDesc implements Comparator<MemberDto> {
 
 		@Override
 		public int compare(MemberDto o1, MemberDto o2) {
@@ -230,8 +325,7 @@ public class MainController {
 			return o1.getMemberPoint() > o2.getMemberPoint() ? -1 : o1.getMemberPoint() < o2.getMemberPoint() ? 1 : 0;
 		}
 	}
-	
-	
+
 	@RequestMapping(value = "/ajax/matchInfoRemove", method = RequestMethod.POST)
 	@ResponseBody
 	public void matchInfoRemove(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "matchNo") int matchNo) {
@@ -255,7 +349,7 @@ public class MainController {
 		}
 		
 		List<MemberDto> monthRanking = mService.getMemberMonthInfo(year, month);
-		Collections.sort(monthRanking, new CompareSeqDesc());
+		Collections.sort(monthRanking, new ComparePointSeqDesc());
 
 		model.addAttribute("MonthRanking", monthRanking);
 		model.addAttribute("Year", year);

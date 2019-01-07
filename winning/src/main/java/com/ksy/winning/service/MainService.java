@@ -86,12 +86,13 @@ public class MainService {
 	@Transactional
 	public String addAllMatchResultInfo() {
 		List<MatchDto> resultList = mMapper.selectLastMatchInfo();
+		
 		String returnDate = "";
 		for(int i=0; i<resultList.size(); i++) {
-			String insertDate = resultList.get(i).getInsertDate();
-			String[] data = insertDate.split("-");
-			resultList.get(i).setYear(data[0]);
-			resultList.get(i).setMonth(data[1]);
+			String insertDate = CalenderUtil.getToday();
+			resultList.get(i).setInsertDate(insertDate);
+			resultList.get(i).setYear(CalenderUtil.getYear());
+			resultList.get(i).setMonth(CalenderUtil.getMonth());
 			mMapper.insertMatchInfoList(resultList.get(i));
 			returnDate = insertDate;
 		}
@@ -173,5 +174,10 @@ public class MainService {
 		result.setMemberDefeatP2(mMapper.getVSInfoDefeat(name, p2Name));
 		
 		return result;
+	}
+	
+	// 마지막 경기 경기 정보 가져오기
+	public List<MatchDto> getFinalMatchInfo() {
+		return mMapper.selectFinalMatchInfo();
 	}
 }

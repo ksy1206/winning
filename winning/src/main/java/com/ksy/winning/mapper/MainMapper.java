@@ -216,4 +216,17 @@ public interface MainMapper {
 	// 상대 전적 패
 	@Select("SELECT COUNT(*) FROM match_info_list WHERE first_player = #{name} AND last_player = #{vsName} AND result = \"last\" OR first_player = #{vsName} AND last_player = #{name} AND result = \"first\";")
 	public int getVSInfoDefeat(@Param("name") String name, @Param("vsName") String vsName);
+	
+	// 마지막 경기 전적 가져오기
+	@Results({
+		@Result(property = "matchNo", column = "match_no"),
+		@Result(property = "firstTeamNo", column = "first_team_no"),
+		@Result(property = "firstPlayer", column = "first_player"),
+		@Result(property = "lastTeamNo", column = "last_team_no"),
+		@Result(property = "lastPlayer", column = "last_player"),
+		@Result(property = "result", column = "result"),
+		@Result(property = "insertDate", column = "insert_date")
+	})
+	@Select("SELECT * FROM match_info_list WHERE insert_date = (SELECT insert_date FROM match_info_list ORDER BY insert_date DESC LIMIT 1) ORDER BY match_no ASC")
+	public List<MatchDto> selectFinalMatchInfo();
 }

@@ -10,16 +10,63 @@
 	#parse("/common/nav.vm")
 
 	<div class="w3-panel">
-	
+
 		#if($MatchInfo.size() <= 0)
-		<div>
-			<button class="w3-button w3-block w3-black" onclick="app.matchRecord();"><b>대진표 생성</b></button>
-		</div>
+		
+		<p class="w3-center">
+			<div class="w3-row">
+				#set($lastMemberName = "")
+				#set($ranking = 1)
+				#if($Rank.size() > 0)
+					#foreach($row in $Rank)
+						#if($ranking == 3)
+							#set($lastMemberName = $row.memberName)
+							<div class="w3-col w3-center">
+								<span class="w3-tag w3-round w3-red w3-center">마지막 경기 꼴지</span><br>
+								<h2><b>[$row.memberName]</b></h2>
+								<h4>[${row.memberVictory}] 승  - [${row.memberDraw}] 무 - [${row.memberDefeat}] 패<h4>
+								승점 : $row.memberPoint 점
+							</div>
+						#end
+					#set($ranking = $ranking + 1)
+					#end
+				#end
+			</div>
+			<hr>
+			<div>
+				<button class="w3-button w3-block w3-black w3-round" onclick="app.matchRecord();"><b>대진표 생성</b></button>
+			</div>
+		</p>
+		<hr>
+		
 		#end
 
 		#set($count = 1)
 		
 		#if($MatchInfo.size() > 0)
+		
+			<p class="w3-center">
+				<div class="w3-row">
+					#set($ranking = 1)
+					#if($Rank.size() > 0)
+						#set($rankClass= "w3-blue")
+						#foreach($row in $Rank)
+							#if($ranking == 3)
+								#set($rankClass= "w3-red")
+							#end
+							<div class="w3-col s4 w3-center">
+								<span class="w3-tag w3-round $rankClass w3-center">
+									$row.memberName [$row.memberPoint]<br>
+									${row.memberVictory}-${row.memberDraw}-${row.memberDefeat}
+								</span>
+							</div>
+						#set($ranking = $ranking + 1)
+						#end
+					#end
+				</div>
+			</p>
+			<hr>
+		
 			#foreach($row in $MatchInfo)
 			<div class="w3-row">
 				<p class="w3-center">
@@ -79,10 +126,6 @@
 				</div>
 			</div>
 			<hr>
-		#else
-			<div class="w3-panel w3-green w3-topbar w3-bottombar w3-border-amber">
-				<p>대진표를 생성해 주세요.</p>
-			</div>
 		#end
 	</div>
 	
